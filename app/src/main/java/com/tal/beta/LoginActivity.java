@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox cbStayconnect, cbUType;
     Button btnLogin;
 
-    String name, phone, email, password, uid, uType;
+    String name, phone, email, password, uid;
     User userdb;
     Boolean stayConnect, registered, firstrun, uTypeBoo;
 
@@ -176,9 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             name = etName.getText().toString();
             phone = etPhone.getText().toString();
-            //uTypeBoo = cbUType.isChecked();
-            if (cbUType.isChecked()) uType = "1";
-            else uType = "0";
+            uTypeBoo = cbUType.isChecked();
 
             final ProgressDialog pd = ProgressDialog.show(this, "Register", "Registering...", true);
             refAuth.createUserWithEmailAndPassword(email, password)
@@ -195,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("MainActivity", "createUserWithEmail:success");
                                 FirebaseUser user = refAuth.getCurrentUser();
                                 uid = user.getUid();
-                                userdb = new User(name, email, phone, uType, uid);
+                                userdb = new User(name, email, phone, uTypeBoo, uid);
                                 refUsers.child(name).setValue(userdb);
                                 Toast.makeText(LoginActivity.this, "Successful registration", Toast.LENGTH_LONG).show();
                                 Intent si = new Intent(LoginActivity.this, ListActivity.class);
