@@ -1,15 +1,16 @@
 package com.tal.beta;
 
 public class User {
-    private String name, email, phone, uid;
+    private String name, email, phone, uType, uid;
 
     public User() {
     }
 
-    public User(String name, String email, String phone, String uid) {
+    public User(String name, String email, String phone, String uType, String uid) {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.uType = uType;
         this.uid = uid;
     }
 
@@ -36,6 +37,10 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getuType(String uType) { return uType;}
+
+    public void setuType() {this.uType = uType;}
 
     public String getUid() {
         return uid;

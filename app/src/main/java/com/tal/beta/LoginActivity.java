@@ -37,14 +37,14 @@ import static com.tal.beta.FBref.refUsers;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView tVtitle, tVregister;
-    EditText eTname, eTphone, eTemail, eTpass;
-    CheckBox cBstayconnect;
-    Button btn;
+    TextView tvTitle, tvRegister;
+    EditText etName, etPhone, etEmail, etPass;
+    CheckBox cbStayconnect, cbUType;
+    Button btnLogin;
 
-    String name, phone, email, password, uid;
+    String name, phone, email, password, uid, uType;
     User userdb;
-    Boolean stayConnect, registered, firstrun;
+    Boolean stayConnect, registered, firstrun, uTypeBoo;
 
 
     @Override
@@ -52,14 +52,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        tVtitle = (TextView) findViewById(R.id.tVtitle);
-        eTname = (EditText) findViewById(R.id.eTname);
-        eTemail = (EditText) findViewById(R.id.eTemail);
-        eTpass = (EditText) findViewById(R.id.eTpass);
-        eTphone = (EditText) findViewById(R.id.eTphone);
-        cBstayconnect = (CheckBox) findViewById(R.id.cBstayconnect);
-        tVregister = (TextView) findViewById(R.id.tVregister);
-        btn = (Button) findViewById(R.id.btn);
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        etName = (EditText) findViewById(R.id.etName);
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPass = (EditText) findViewById(R.id.etPass);
+        etPhone = (EditText) findViewById(R.id.etPhone);
+        cbUType = (CheckBox) findViewById(R.id.cbUType);
+        cbStayconnect = (CheckBox) findViewById(R.id.cbStayconnect);
+        tvRegister = (TextView) findViewById(R.id.tvRegister);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
 
         stayConnect = false;
         registered = true;
@@ -68,10 +69,10 @@ public class LoginActivity extends AppCompatActivity {
         firstrun = settings.getBoolean("firstRun", false);
         Toast.makeText(this, "" + firstrun, Toast.LENGTH_SHORT).show();
         if (firstrun) {
-            tVtitle.setText("Register");
-            eTname.setVisibility(View.VISIBLE);
-            eTphone.setVisibility(View.VISIBLE);
-            btn.setText("Register");
+            tvTitle.setText("Register");
+            etName.setVisibility(View.VISIBLE);
+            etPhone.setVisibility(View.VISIBLE);
+            btnLogin.setText("Register");
             registered = false;
             logoption();
         } else regoption();
@@ -109,17 +110,17 @@ public class LoginActivity extends AppCompatActivity {
         ClickableSpan span = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                tVtitle.setText("Register");
-                eTname.setVisibility(View.VISIBLE);
-                eTphone.setVisibility(View.VISIBLE);
-                btn.setText("Register");
+                tvTitle.setText("Register");
+                etName.setVisibility(View.VISIBLE);
+                etPhone.setVisibility(View.VISIBLE);
+                btnLogin.setText("Register");
                 registered = false;
                 logoption();
             }
         };
         ss.setSpan(span, 24, 38, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tVregister.setText(ss);
-        tVregister.setMovementMethod(LinkMovementMethod.getInstance());
+        tvRegister.setText(ss);
+        tvRegister.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void logoption() {
@@ -127,17 +128,17 @@ public class LoginActivity extends AppCompatActivity {
         ClickableSpan span = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                tVtitle.setText("Login");
-                eTname.setVisibility(View.INVISIBLE);
-                eTphone.setVisibility(View.INVISIBLE);
-                btn.setText("Login");
+                tvTitle.setText("Login");
+                etName.setVisibility(View.INVISIBLE);
+                etPhone.setVisibility(View.INVISIBLE);
+                btnLogin.setText("Login");
                 registered = true;
                 regoption();
             }
         };
         ss.setSpan(span, 26, 37, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tVregister.setText(ss);
-        tVregister.setMovementMethod(LinkMovementMethod.getInstance());
+        tvRegister.setText(ss);
+        tvRegister.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**
@@ -148,8 +149,8 @@ public class LoginActivity extends AppCompatActivity {
      * <p>
      */
     public void logorreg(View view) {
-        email = eTemail.getText().toString();
-        password = eTpass.getText().toString();
+        email = etEmail.getText().toString();
+        password = etPass.getText().toString();
         if (registered) {
             final ProgressDialog pd = ProgressDialog.show(this, "Login", "Connecting...", true);
             refAuth.signInWithEmailAndPassword(email, password)
@@ -160,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("stayConnect", cBstayconnect.isChecked());
+                                editor.putBoolean("stayConnect", cbStayconnect.isChecked());
                                 editor.commit();
                                 Log.d("MainActivity", "signinUserWithEmail:success");
                                 Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_LONG).show();
@@ -173,8 +174,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            name = eTname.getText().toString();
-            phone = eTphone.getText().toString();
+            name = etName.getText().toString();
+            phone = etPhone.getText().toString();
+            //uTypeBoo = cbUType.isChecked();
+            if (cbUType.isChecked()) uType = "1";
+            else uType = "0";
 
             final ProgressDialog pd = ProgressDialog.show(this, "Register", "Registering...", true);
             refAuth.createUserWithEmailAndPassword(email, password)
@@ -185,13 +189,13 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("stayConnect", cBstayconnect.isChecked());
+                                editor.putBoolean("stayConnect", cbStayconnect.isChecked());
                                 editor.putBoolean("firstRun", false);
                                 editor.commit();
                                 Log.d("MainActivity", "createUserWithEmail:success");
                                 FirebaseUser user = refAuth.getCurrentUser();
                                 uid = user.getUid();
-                                userdb = new User(name, email, phone, uid);
+                                userdb = new User(name, email, phone, uType, uid);
                                 refUsers.child(name).setValue(userdb);
                                 Toast.makeText(LoginActivity.this, "Successful registration", Toast.LENGTH_LONG).show();
                                 Intent si = new Intent(LoginActivity.this, ListActivity.class);
