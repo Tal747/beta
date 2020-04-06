@@ -28,7 +28,8 @@ public class ListActivity extends AppCompatActivity {
     EditText etSrc;
     ListView lvGroups;
 
-    ArrayList<String> stringList = new ArrayList<String>();
+    ArrayList<String> gNames = new ArrayList<String>();
+    ArrayList<String[]> stringsList = new ArrayList<String[]>();
     ArrayAdapter<String> adapter;
     boolean uType;
 
@@ -46,9 +47,6 @@ public class ListActivity extends AppCompatActivity {
         lvGroups = (ListView) findViewById(R.id.lvGroups);
 
         userType();
-
-        adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, stringList);
-        lvGroups.setAdapter(adapter);
 
         refreshGroupList();
     }
@@ -78,13 +76,18 @@ public class ListActivity extends AppCompatActivity {
         refGroups.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                stringList.clear();
+                String[] group = new String[2];
+                stringsList.clear();
+                gNames.clear();
                 for (DataSnapshot childSnapShot : dataSnapshot.getChildren()) {
 
-                    String value = childSnapShot.getValue(String.class);
-
-                    stringList.add(value);
+                    group[0] = childSnapShot.child("id").getValue(String.class);
+                    group[1] = childSnapShot.child("name").getValue(String.class);
+                    stringsList.add(group);
+                    gNames.add(group[1]);
                 }
+                adapter = new ArrayAdapter<String>(ListActivity.this, R.layout.support_simple_spinner_dropdown_item, gNames);
+                lvGroups.setAdapter(adapter);
             }
 
             @Override

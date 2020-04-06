@@ -3,11 +3,10 @@ package com.tal.beta;
 import java.util.List;
 
 public class Group {
-    private String name, date, id;
+    private String name, date, id, creator;
     private boolean active, prvt;
-    private User creator;
 
-    public Group(String name, String date, String id, boolean active, boolean prvt, User creator){
+    public Group(String name, String date, String id, boolean active, boolean prvt, String creator){
         this.name = name;
         this.date = date;
         this.id = id;
@@ -36,7 +35,7 @@ public class Group {
 
     public void setPrvt(boolean prvt) {this.prvt = prvt;}
 
-    public User getCreator() {return creator;}
+    public String getCreator() {return creator;}
 
-    public void setCreator(User creator) {this.creator = creator;}
+    public void setCreator(String creator) {this.creator = creator;}
 }
