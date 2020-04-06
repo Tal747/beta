@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     String name, phone, email, password, uid;
     User userdb;
-    Boolean stayConnect, registered, firstrun, uTypeBoo;
+    boolean stayConnect, registered, firstrun, uType;
 
 
     @Override
@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             name = etName.getText().toString();
             phone = etPhone.getText().toString();
-            uTypeBoo = cbUType.isChecked();
+            uType = cbUType.isChecked();
 
             final ProgressDialog pd = ProgressDialog.show(this, "Register", "Registering...", true);
             refAuth.createUserWithEmailAndPassword(email, password)
@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d("MainActivity", "createUserWithEmail:success");
                                 FirebaseUser user = refAuth.getCurrentUser();
                                 uid = user.getUid();
-                                userdb = new User(name, email, phone, uTypeBoo, uid);
+                                userdb = new User(name, email, phone, uType, uid);
                                 refUsers.child(uid).setValue(userdb);
                                 Toast.makeText(LoginActivity.this, "Successful registration", Toast.LENGTH_LONG).show();
                                 Intent si = new Intent(LoginActivity.this, ListActivity.class);

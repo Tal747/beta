@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -29,8 +30,11 @@ public class ListActivity extends AppCompatActivity {
 
     ArrayList<String> stringList = new ArrayList<String>();
     ArrayAdapter<String> adapter;
+    boolean uType;
+    String uTypeString;
 
     ValueEventListener valueEventListener;
+    FirebaseUser user = refAuth.getCurrentUser();
 
 
     @Override
@@ -42,9 +46,34 @@ public class ListActivity extends AppCompatActivity {
         etSrc = (EditText) findViewById(R.id.etSrc);
         lvGroups = (ListView) findViewById(R.id.lvGroups);
 
+        userType();
+        if (uType) uTypeString = "true";
+        else uTypeString = "false";
+        Toast.makeText(this, "uType = " + uTypeString, Toast.LENGTH_LONG).show();
+        if (uType) btnNew.setVisibility(View.VISIBLE);
+        else btnNew.setVisibility(View.INVISIBLE);
+
         adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, stringList);
         lvGroups.setAdapter(adapter);
 
+        refreshGroupList();
+    }
+
+    private void userType() {
+        refUsers.child(user.getUid()).child("uType").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                uType = (Boolean) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ListActivity.this, "Error: " + databaseError.getCode(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void refreshGroupList() {
         refGroups.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
