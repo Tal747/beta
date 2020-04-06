@@ -31,9 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
-import static android.view.View.INVISIBLE;
-import static com.tal.beta.FBref.refAuth;
-import static com.tal.beta.FBref.refUsers;
+import static com.tal.beta.FBref.*;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -72,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
             tvTitle.setText("Register");
             etName.setVisibility(View.VISIBLE);
             etPhone.setVisibility(View.VISIBLE);
+            cbUType.setVisibility(View.VISIBLE);
+            cbUType.setEnabled(true);
             btnLogin.setText("Register");
             registered = false;
             logoption();
@@ -113,6 +113,8 @@ public class LoginActivity extends AppCompatActivity {
                 tvTitle.setText("Register");
                 etName.setVisibility(View.VISIBLE);
                 etPhone.setVisibility(View.VISIBLE);
+                cbUType.setVisibility(View.VISIBLE);
+                cbUType.setEnabled(true);
                 btnLogin.setText("Register");
                 registered = false;
                 logoption();
@@ -131,6 +133,8 @@ public class LoginActivity extends AppCompatActivity {
                 tvTitle.setText("Login");
                 etName.setVisibility(View.INVISIBLE);
                 etPhone.setVisibility(View.INVISIBLE);
+                cbUType.setVisibility(View.INVISIBLE);
+                cbUType.setEnabled(false);
                 btnLogin.setText("Login");
                 registered = true;
                 regoption();
@@ -194,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                                 FirebaseUser user = refAuth.getCurrentUser();
                                 uid = user.getUid();
                                 userdb = new User(name, email, phone, uTypeBoo, uid);
-                                refUsers.child(name).setValue(userdb);
+                                refUsers.child(uid).setValue(userdb);
                                 Toast.makeText(LoginActivity.this, "Successful registration", Toast.LENGTH_LONG).show();
                                 Intent si = new Intent(LoginActivity.this, ListActivity.class);
                                 startActivity(si);

@@ -2,7 +2,7 @@ package com.tal.beta;
 
 public class User {
     private String name, email, phone, uid;
-    Boolean uType;
+    private Boolean uType;
 
     public User() {
     }
