@@ -19,4 +19,8 @@ public class NewGroupActivity extends AppCompatActivity {
 
     public void createNewGroup(View view) {
     }
+
+    public void btnCancel(View view) {
+        finish();
+    }
 }
